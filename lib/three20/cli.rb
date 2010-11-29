@@ -39,10 +39,10 @@ module Three20
 
     def install(path = nil)
       puts "install"
-      git_binary   = "/usr/bin/env git"
+      git_binary = "/usr/bin/env git"
       ret, err = '', ''
       Open3.popen3("git status") do |stdin, stdout, stderr|
-        p stdin.read
+        #p stdin.read
         p stdout.read
         #Timeout.timeout(10) do
           while tmp = stdout.read(1024)
@@ -86,7 +86,6 @@ module Three20
     
     desc "version", "Prints the bundler's version information"
     def version
-      #Three20.ui.info "Three20 version #{Three20::VERSION}"
       puts "Three20 gem version #{Three20::VERSION}"
     end
     map %w(-v --version) => :version

@@ -1,9 +1,9 @@
-Feature: something something
-  In order to something something
-  A user something something
-  something something something
+Feature: Install Three20
+  In order to use three20
+  A user must install three20 first
+  user runs three20 install from command line.
 
-  Scenario: something something
-    Given inspiration
-    When I create a sweet new gem
-    Then everyone should see how awesome I am
+  Scenario: Install
+    Given gem is installed
+    When I run three20 install
+    Then I should see installing three20

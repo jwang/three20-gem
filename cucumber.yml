@@ -1,0 +1,5 @@
+default: --require features --format pretty --tags ~@wip
+pretty:  --require features --format pretty   --tags ~@wip
+wip:     --require features --tags @wip
+autotest: --require features --format pretty --color
+autotest-all: --require features --format pretty --color
