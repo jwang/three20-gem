@@ -14,9 +14,29 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "three20"
   s.add_dependency "thor"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "cucumber"
+  s.add_development_dependency "ZenTest"
   
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+  
+  s.post_install_message =<<eos
+  ********************************************************************************
+    Requires Git - http://git-scm.com
+
+    Follow @three20 on Twitter for announcements, updates, and news.
+    https://twitter.com/three20
+
+    Join the mailing list!
+    https://groups.google.com/group/three20
+
+    Report issues on Github
+    https://github.com/jwang/three20
+
+  ********************************************************************************
+eos
+  
 end

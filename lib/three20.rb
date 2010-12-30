@@ -3,6 +3,9 @@ require 'three20/version'
 
 module Three20
   # Your code goes here...
+  
+  THREE20_PATH = '~/.three20/'
+  
   autoload :UI,                  'three20/ui'
   
   class Three20Error < StandardError
