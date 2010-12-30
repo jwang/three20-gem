@@ -63,7 +63,7 @@ module Three20
 
       #"git clone git://github.com/facebook/three20.git"
       Open3.popen3("git clone git://github.com/facebook/three20.git") do |stdin, stdout, stderr|
-        #p stdin.read
+        
         p stdout.read
         #Timeout.timeout(10) do
           while tmp = stdout.read(1024)
@@ -100,7 +100,7 @@ module Three20
         File.open('config_file', 'r') do |f1|
         while line = f1.gets
           puts line
-          path = line + "/three20"
+          path = line << "/three20"
          end
         end
       end
@@ -110,7 +110,7 @@ module Three20
       
       FileUtils.cd File.expand_path(path, __FILE__)
 
-      Open3.popen3("git update") do |stdin, stdout, stderr|
+      Open3.popen3("git pull") do |stdin, stdout, stderr|
         #p stdin.read
         p stdout.read
         #Timeout.timeout(10) do
