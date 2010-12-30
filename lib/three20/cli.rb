@@ -31,10 +31,8 @@ module Three20
       If the source has already been installed, three20 will tell you so and then exit.
     D
     method_option "path", :type => :string, :banner =>
-      "Specify a different path than the system default ($BUNDLE_PATH or $GEM_HOME). Bundler will remember this value for future installs on this machine"
-    method_option "system", :type => :boolean, :banner =>
-      "Install to the system location ($BUNDLE_PATH or $GEM_HOME) even if the bundle was previously installed somewhere else for this application"
-
+      "Optional: Specify a different path than the system default (~/.three20). Three20 will remember this value for future installs on this machine"
+    
     def install(path = nil)
       puts "install"
       git_binary = "/usr/bin/env git"
@@ -64,7 +62,7 @@ module Three20
       #"git clone git://github.com/facebook/three20.git"
       Open3.popen3("git clone git://github.com/facebook/three20.git") do |stdin, stdout, stderr|
         
-        p stdout.read
+        p stdout.read.chomp
         #Timeout.timeout(10) do
           while tmp = stdout.read(1024)
             ret += tmp
@@ -85,13 +83,11 @@ module Three20
       #FileUtils.mkdir_p(File.join(target, 'lib', name))
     end
     
-    desc "update", "update the current environment"
+    desc "update", "update Three20 to latest from GitHub"
     long_desc <<-D
-      Update will install the newest versions of the gems listed in the Gemfile. Use
-      update when you have changed the Gemfile, or if you want to get the newest
-      possible versions of the gems in the bundle.
+      Update will pull the latest version of Three20 from GitHub.
     D
-    method_option "source", :type => :array, :banner => "Update a specific source (and all gems associated with it)"
+    method_option "path", :type => :string, :banner => "Update a specific path"
     def update(path = nil)
       puts "update"
 
@@ -112,7 +108,7 @@ module Three20
 
       Open3.popen3("git pull") do |stdin, stdout, stderr|
         #p stdin.read
-        p stdout.read
+        p stdout.read.chomp
         #Timeout.timeout(10) do
           while tmp = stdout.read(1024)
             ret += tmp
