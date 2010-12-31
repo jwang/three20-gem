@@ -3,6 +3,7 @@ require 'thor/actions'
 require 'fileutils'
 require 'open3'
 require 'three20/pbxproj'
+require 'pathname'
 
 #require 'rubygems/config_file'
 
@@ -164,9 +165,24 @@ module Three20
     def add (path = nil)
       puts "add"
       puts "path = #{path}"
-      
+
+      current_path = Dir.pwd
+
+      FileUtils.cd File.expand_path("~/.three20", __FILE__)
+      three20_path = nil
+      File.open('config_file', 'r') do |f1|
+         while line = f1.gets
+           puts line
+           three20_path = line
+         end
+       end
+
+      FileUtils.cd(current_path)
+
       project = Pbxproj.new
       project.find_project_file(path)
+
+      project.relative_path(path,three20_path)
 
     end
     

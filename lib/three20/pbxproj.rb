@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'pathname'
 
 module Three20
 
@@ -25,20 +26,29 @@ module Three20
       else
         puts "project: #{projects[0]} was found"
       end
-
+      self.xcodeproj_path(path)
       projects[0]
       
     end
 
     # A pbxproj file is contained within an xcodeproj file.
     # This method simply strips off the project.pbxproj part of the path.
-    def xcodeproj_path
-      
+    def xcodeproj_path(proj_path = nil)
+      @project_path = proj_path
+      puts @project_path
     end
 
     # Find the relative path between 2 paths, path2 is always the path to three20's install
-    def relpath(path1, path2)
+    def relative_path(path1, path2)
 
+      puts "path1: #{File.expand_path(path1)} with path2: #{path2}"
+
+      p1 = Pathname.new(File.expand_path(path1))
+      p2 = Pathname.new(path2 << "/three20")
+      relative_path = p2.relative_path_from(p1)
+      
+      puts "the relative path is: #{relative_path}"
+      puts "expanded: #{File.expand_path(relative_path)}"
     end
 
     # Get and cache the dependencies for this project.
