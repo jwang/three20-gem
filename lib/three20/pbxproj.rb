@@ -8,6 +8,8 @@ module Three20
     # search .xcodeproj in the given path. If no path is provided, then searches the current path.
     def find_project_file (path = nil)
 
+      current_dir = FileUtils.pwd
+
       unless path.nil?
         path = File.expand_path(path)
         FileUtils.cd path #File.expand_path(path)
@@ -26,6 +28,9 @@ module Three20
       else
         puts "project: #{projects[0]} was found"
       end
+
+      FileUtils.cd current_dir
+
       self.xcodeproj_path(path)
       projects[0]
       
@@ -35,17 +40,27 @@ module Three20
     # This method simply strips off the project.pbxproj part of the path.
     def xcodeproj_path(proj_path = nil)
       @project_path = proj_path
-      puts @project_path
+      puts "proj_path #{@project_path}"
     end
 
     # Find the relative path between 2 paths, path2 is always the path to three20's install
-    def relative_path(path1, path2)
+    def relative_path(path1 = nil, path2)
+      path2 = path2 << "/three20"
 
-      puts "path1: #{File.expand_path(path1)} with path2: #{path2}"
+      unless path1.nil?
+        path1 = File.expand_path(path1)
+        puts "expanded path1 to: #{path1}"
+        #FileUtils.cd path #File.expand_path(path)
 
-      p1 = Pathname.new(File.expand_path(path1))
-      p2 = Pathname.new(path2 << "/three20")
-      relative_path = p2.relative_path_from(p1)
+      else
+        path1 = FileUtils.pwd
+      end
+
+      puts "path1: #{path1} with path2: #{path2}"
+
+      p1 = Pathname.new(path1)
+      p2 = Pathname.new(path2)
+      relative_path = p2.relative_path_from(p1.parent) # TODO adding .parent seems like a hack
       
       puts "the relative path is: #{relative_path}"
       puts "expanded: #{File.expand_path(relative_path)}"

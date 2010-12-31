@@ -181,7 +181,7 @@ module Three20
 
       project = Pbxproj.new
       project.find_project_file(path)
-
+      puts "path after find: #{path}"
       project.relative_path(path,three20_path)
 
     end
