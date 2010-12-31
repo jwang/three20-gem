@@ -32,6 +32,7 @@ module Three20
       FileUtils.cd current_dir
 
       self.xcodeproj_path(path)
+      self.get_project_data(path,projects[0])
       projects[0]
       
     end
@@ -65,6 +66,46 @@ module Three20
       puts "the relative path is: #{relative_path}"
       puts "expanded: #{File.expand_path(relative_path)}"
     end
+
+    # Load the project data from disk.
+    def get_project_data(path, project_name)
+    #if self._project_data is None:
+    #if not os.path.exists(self.path()):
+    #logging.info("Couldn't find the project at this path:")
+    #logging.info(self.path())
+    #return None
+      @project_data = nil
+      
+      xcode_project = path << "/" << project_name << "/project.pbxproj"
+      puts "xcode_project = #{xcode_project}"
+
+      file = File.new(xcode_project, "r")
+
+      counter = 1
+      while (line = file.gets)
+        puts "#{counter}: #{line}"
+        #@project_data << line
+        counter = counter + 1
+      end
+      file.close
+
+      
+
+    #project_file = open(self.path(), 'r')
+    #self._project_data = project_file.read()
+
+    
+    end
+
+    # Write the project data to disk.
+    def set_project_data(project_data)
+
+    #if self._project_data != project_data:
+    #self._project_data = project_data
+    #project_file = open(self.path(), 'w')
+    #project_file.write(self._project_data)
+    end
+
 
     # Get and cache the dependencies for this project.
     def dependencies
