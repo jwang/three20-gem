@@ -2,6 +2,8 @@ require 'thor'
 require 'thor/actions'
 require 'fileutils'
 require 'open3'
+require 'three20/pbxproj'
+
 #require 'rubygems/config_file'
 
 #Gem.configuration
@@ -10,6 +12,7 @@ module Three20
   class CLI < Thor
     include Thor::Actions
     include Open3
+    #include pbxproj
     
     def initialize(*)
       super
@@ -78,7 +81,24 @@ module Three20
           err += tmp
         end
       end
-            
+      puts "done downloading from github"
+      
+      Open3.popen3("git checkout v1.0a2") do |stdin, stdout, stderr|
+        p stdout.read.chomp
+          while tmp = stdout.read(1024)
+            ret += tmp
+            if (@bytes_read += tmp.size) > 5242880
+              bytes = @bytes_read
+              @bytes_read = 0
+              #raise GitTimeout.new(command, bytes)
+            end
+          end
+        #end
+
+        while tmp = stderr.read(1024)
+          err += tmp
+        end
+      end
       #target = File.join(Dir.pwd, name)
       #FileUtils.mkdir_p(File.join(target, 'lib', name))
     end
@@ -143,6 +163,11 @@ module Three20
     desc "add", "Add Three20 to a project at the current path or given path"
     def add (path = nil)
       puts "add"
+      puts "path = #{path}"
+      
+      project = Pbxproj.new
+      project.find_project_file(path)
+
     end
     
     desc "remove", "Removes Three20 from the project at the current path or given path"

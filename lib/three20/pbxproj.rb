@@ -1,9 +1,32 @@
+require 'fileutils'
+
 module Three20
 
   class Pbxproj
 
     # search .xcodeproj in the given path. If no path is provided, then searches the current path.
     def find_project_file (path = nil)
+
+      unless path.nil?
+        path = File.expand_path(path)
+        FileUtils.cd path #File.expand_path(path)
+
+      else
+        path = FileUtils.pwd
+      end
+
+      puts "checking #{path} for .xcodeproj"
+
+      projects = Dir.glob("*.xcodeproj")
+
+      if projects.empty?
+        puts "No XCode project was found in the #{path}"
+        Raise XCodeError
+      else
+        puts "project: #{projects[0]} was found"
+      end
+
+      projects[0]
       
     end
 
@@ -13,7 +36,7 @@ module Three20
       
     end
 
-    # Find the relative path between 2 paths
+    # Find the relative path between 2 paths, path2 is always the path to three20's install
     def relpath(path1, path2)
 
     end
