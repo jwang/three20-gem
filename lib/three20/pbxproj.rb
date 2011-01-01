@@ -162,8 +162,6 @@ module Three20
         build_idx = build_phases.to_s.index('buildPhases = (').to_i + 'buildPhases = ('.length
         res_idx = build_phases.to_s.index(' /* Resources */,').to_i
 
-
-
         #match = re.search('([A-Z0-9]+) \/\* Resources \*\/', buildPhases)
         unless res_idx.nil?
           puts build_phases.to_s[build_idx..res_idx].strip
@@ -174,7 +172,10 @@ module Three20
         end
         
         #match = re.search('([A-Z0-9]+) \/\* Frameworks \*\/', buildPhases)
-        if match.nil?
+
+        frameworks_idx = build_phases.to_s.index(/([A-Z0-9]+) \/\* Frameworks \*\//).to_i
+
+        if frameworks_idx = 0
           puts "Couldn't find the Frameworks phase from: " #+self.path()
           puts "Please add a New Link Binary With Libraries Build Phase to your target"
           puts "Right click your target in the project, Add, New Build Phase,"
@@ -182,7 +183,10 @@ module Three20
           return nil
         end
 
-        @frameworks_guid = nil
+        temp_frameworks = build_phases.to_s[frameworks_idx..build_phases.to_s.length]
+        temp_idx = temp_frameworks.index(" /*").to_i        
+
+        @frameworks_guid = temp_frameworks[0..temp_idx-1]
         #(self._frameworks_guid, ) = match.groups()
 
         # Get the dependencies
