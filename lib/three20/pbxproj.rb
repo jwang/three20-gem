@@ -113,6 +113,8 @@ module Three20
       #file.close
       #s = IO.read(xcode_project)
       #puts "s = #{s}"
+
+
       #puts "project data #{@project_data}"
 
       self.dependencies
@@ -140,7 +142,7 @@ module Three20
         # Get build phases
         build_phases = @project_data.match('([A-Z0-9]+) \/\* ' << @target.to_s << ' \*\/ = {\n[ \t]+isa = PBXNativeTarget;(?:.|\n)+?buildPhases = \(\n((?:.|\n)+?)\);')
 
-        puts "build_phases = #{build_phases}"
+        #puts "build_phases = #{build_phases}"
 
         if build_phases.nil?
           puts "This is fatal: Unable to find the build phases from your target at: "  # TODO - add path as a ivar
@@ -155,27 +157,28 @@ module Three20
         @guid = build_phases.to_s[0..idx-1]
         puts "guid: #{@guid}"
         
-        # Get the build phases we care about.
-        match = nil
+        # Get the build phases we care about. - Resources and Frameworks
+        
         puts build_phases.to_s.index('buildPhases = (')
         puts build_phases.to_s.index(' /* Resources */,')
         build_idx = build_phases.to_s.index('buildPhases = (').to_i + 'buildPhases = ('.length
         res_idx = build_phases.to_s.index(' /* Resources */,').to_i
 
         #match = re.search('([A-Z0-9]+) \/\* Resources \*\/', buildPhases)
-        unless res_idx.nil?
+        unless res_idx == 0
           puts build_phases.to_s[build_idx..res_idx].strip
           @resources_guid = build_phases.to_s[build_idx..res_idx].strip
           #(self._resources_guid, ) = match.groups()
         else
           @resources_guid = nil
+          puts "Couldn't find the Resources phase"
         end
         
         #match = re.search('([A-Z0-9]+) \/\* Frameworks \*\/', buildPhases)
 
         frameworks_idx = build_phases.to_s.index(/([A-Z0-9]+) \/\* Frameworks \*\//).to_i
 
-        if frameworks_idx = 0
+        if frameworks_idx == 0
           puts "Couldn't find the Frameworks phase from: " #+self.path()
           puts "Please add a New Link Binary With Libraries Build Phase to your target"
           puts "Right click your target in the project, Add, New Build Phase,"
@@ -191,7 +194,11 @@ module Three20
 
         # Get the dependencies
         #result = re.search(re.escape(self._guid)+' \/\* '+re.escape(self.target)+' \*\/ = {\n[ \t]+isa = PBXNativeTarget;(?:.|\n)+?dependencies = \(\n((?:[ \t]+[A-Z0-9]+ \/\* PBXTargetDependency \*\/,\n)*)[ \t]*\);\n',project_data)
+        result = @project_data.match('([A-Z0-9]+) \/\* ' << @target.to_s << ' \*\/ = {\n[ \t]+isa = PBXNativeTarget;(?:.|\n)+?builddependencies = \(\n((?:[ \t]+[A-Z0-9]+ \/\* PBXTargetDependency \*\/,\n)*)[ \t]*\);\n')
 
+        # TODO - need to find a dependency to test somewhere
+
+        puts "result #{result}"
         if result.nil?
           puts "Unable to get dependencies from: "#+self.path()
           #return None
