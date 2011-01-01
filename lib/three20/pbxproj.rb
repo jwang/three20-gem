@@ -167,6 +167,7 @@ module Three20
         #match = re.search('([A-Z0-9]+) \/\* Resources \*\/', buildPhases)
         unless res_idx.nil?
           puts build_phases.to_s[build_idx..res_idx].strip
+          @resources_guid = build_phases.to_s[build_idx..res_idx].strip
           #(self._resources_guid, ) = match.groups()
         else
           @resources_guid = nil
