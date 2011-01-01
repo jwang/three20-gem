@@ -157,9 +157,16 @@ module Three20
         
         # Get the build phases we care about.
         match = nil
+        puts build_phases.to_s.index('buildPhases = (')
         puts build_phases.to_s.index(' /* Resources */,')
+        build_idx = build_phases.to_s.index('buildPhases = (').to_i + 'buildPhases = ('.length
+        res_idx = build_phases.to_s.index(' /* Resources */,').to_i
+
+
+
         #match = re.search('([A-Z0-9]+) \/\* Resources \*\/', buildPhases)
-        unless match.nil?
+        unless res_idx.nil?
+          puts build_phases.to_s[build_idx..res_idx].strip
           #(self._resources_guid, ) = match.groups()
         else
           @resources_guid = nil
