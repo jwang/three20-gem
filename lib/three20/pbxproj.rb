@@ -12,7 +12,7 @@ module Three20
 
       unless path.nil?
         path = File.expand_path(path)
-        FileUtils.cd path #File.expand_path(path)
+        FileUtils.cd path
 
       else
         path = FileUtils.pwd
